@@ -1,0 +1,59 @@
+import { supabase } from "@/lib/supabase";
+import type { Bookings, BookingWithService } from "../types/bookingsType";
+
+// =========================
+// CREATE BOOKING
+// =========================
+export async function createBooking(
+  payload: Omit<Bookings, "created_at" | "updated_at">
+): Promise<BookingWithService> {
+
+  const { data, error } = await supabase
+    .from("bookings_tb")
+    .insert(payload)
+    .select("*, services_tb(*)")
+    .single();
+
+  if (error) {
+
+    // unique constraint error
+    if (error.message.includes("unique_booking_slot")) {
+
+      throw new Error(
+        "Jam sudah dibooking orang lain, silahkan pilih waktu lain"
+      );
+    }
+
+    throw new Error(`Create booking failed: ${error.message}`);
+  }
+
+  return data as BookingWithService;
+}
+
+// =========================
+// GET BOOKINGS
+// =========================
+export async function getDataBookings() {
+
+  const { data, error } = await supabase
+    .from("bookings_tb")
+    .select("*, services_tb(*)")
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
+// =========================
+// GET SERVICES
+// =========================
+export async function getDataServices() {
+
+  const { data, error } = await supabase
+    .from("services_tb")
+    .select();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
