@@ -7,7 +7,7 @@ export function getSupabase() {
 
   // Fallback string kosong jika variabel belum siap saat build
   return createClient(
-    supabaseUrl || "https://supabase.co", 
-    supabaseAnonKey || "placeholder-key"
+    supabaseUrl || "https://nwndwmdqpnvcdcdkzgoq.supabase.co", 
+    supabaseAnonKey || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53bmR3bWRxcG52Y2RjZGt6Z29xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwMTQzMjYsImV4cCI6MjA5MjU5MDMyNn0.rqGNpuzmQkE1s3Hld0LAkO2giJP_-exPr8y4trJRHpw"
   );
 }
