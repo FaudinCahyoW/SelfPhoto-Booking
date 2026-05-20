@@ -1,4 +1,3 @@
-
 import { getBookingByToken } from "@/services/userServices";
 import { Card } from "flowbite-react";
 
@@ -12,7 +11,9 @@ export default async function DetailBooking({ params }: DetailProps) {
   const { secret_token } = params;
 
   const detail = await getBookingByToken(secret_token);
-
+  if (!detail) {
+    return <div>Booking tidak ditemukan</div>;
+  }
   return (
     <section className="min-h-screen flex items-center justify-center py-2">
       <Card className="w-full max-w-3xl rounded-3xl border-0 bg-white shadow-2xl">
@@ -94,6 +95,5 @@ export default async function DetailBooking({ params }: DetailProps) {
         </div>
       </Card>
     </section>
-
   );
 }
