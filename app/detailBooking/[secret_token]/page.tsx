@@ -1,7 +1,6 @@
 
 import { getBookingByToken } from "@/services/userServices";
 import { Card } from "flowbite-react";
-import { div } from "framer-motion/client";
 
 type DetailProps = {
   params: {

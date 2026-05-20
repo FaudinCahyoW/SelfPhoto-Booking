@@ -5,6 +5,7 @@ import { Bookings } from "@/types/bookingsType";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { HiCalendar } from "react-icons/hi";
+import {id} from "date-fns/locale"
 
 type Props = {
   date: Date | null;
@@ -24,7 +25,13 @@ export function DatePickerComp({
 
   const { services } = useBooking();
 
-  const bookedSlotsSimulasi = bookings.map((t) => t.time);
+  const bookedSlotsSimulasi = bookings.filter((booking) => {
+    const bookingDate = new Date(booking.date).toDateString()
+
+    const selectedDate = date?.toDateString()
+
+    return bookingDate === selectedDate
+  }).map((booking) => booking.time);
 
   return (
     <div className="mb-7">
@@ -42,6 +49,7 @@ export function DatePickerComp({
               onDateChange(d);
               onTimeChange("", "", ""); 
             }}
+            locale={id}
             minDate={new Date()}
             placeholderText="Pilih tanggal"
             dateFormat="dd MMM yyyy"
@@ -58,7 +66,7 @@ export function DatePickerComp({
             const [start, end] = value.split(" - ");
             onTimeChange(start, end, value);
           }}
-          className="rounded-lg w-44 px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all "
+          className="rounded-lg w-44 px-3 py-2 border border-white/20 text-white placeholder:text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all "
         >
           <option value="" disabled>
             Pilih Jam
@@ -76,6 +84,7 @@ export function DatePickerComp({
                 key={i}
                 value={displayValue}
                 disabled={isBooked} // Mengunci elemen dropdown agar tidak bisa diklik
+                className="bg-pink-500 hover:bg-pink-400"
               >
                 {/* Modifikasi teks opsi secara ekstrem agar perubahan langsung terlihat */}
                 {isBooked ? `⛔ [PENUH] ${displayValue}` : displayValue}
