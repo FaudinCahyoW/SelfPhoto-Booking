@@ -57,3 +57,18 @@ export async function getDataServices() {
 
   return data;
 }
+export async function getBookingByToken(
+  secret_token: string
+): Promise<BookingWithService> {
+
+  console.log(secret_token);
+
+  const { data, error } = await supabase
+    .from("bookings_tb")
+    .select("*, services_tb(*)")
+    .eq("secret_token", secret_token);
+
+  if (error) throw new Error(error.message);
+
+  return data[0];
+}

@@ -10,7 +10,8 @@ type PropsSelectedService = {
 };
 
 export function BookingForm({ selectedService }: PropsSelectedService) {
-  const { bookings, submitBooking } = useBooking();
+  // Ambil state 'success' bawaan dari hook useBooking Anda
+  const { bookings, submitBooking, success } = useBooking();
 
   const [form, setForm] = useState({
     service_id: "",
@@ -46,15 +47,36 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
     e.preventDefault();
     if (!selectedService) return;
 
+    // Format tanggal lokal (YYYY-MM-DD) untuk backend Anda
+    const year = form.date?.getFullYear();
+    const month = String((form.date?.getMonth() || 0) + 1).padStart(2, "0");
+    const day = String(form.date?.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    // Jalankan submit ke hook (Toast loading & success otomatis terpicu dari dalam hook)
     await submitBooking({
       service_id: selectedService.service_id,
       name: form.name,
       email_booking: form.email_booking,
       phone_number: form.phone_number,
-      date: form.date?.toISOString() || "",
+      date: formattedDate,
       time: form.time,
     });
   };
+
+  // EFEK PEMBERSIH INPUT: Jika proses di hook sukses, kosongkan isian form
+  useEffect(() => {
+    if (success && selectedService) {
+      setForm({
+        service_id: selectedService.service_id,
+        name: "",
+        email_booking: "",
+        phone_number: "",
+        date: null,
+        time: "",
+      });
+    }
+  }, [success, selectedService]);
 
   useEffect(() => {
     if (selectedService) {
@@ -69,13 +91,14 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
     <main>
       <h1 className="mb-5">Silahkan Buat Pesananmu</h1>
       <section>
-        <form action="post" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <InputComponent
             id="name"
             name="name"
             label="Nama Lengkap"
             type="text"
             placeholder="Masukkan Nama Lengkap Anda"
+            value={form.name} 
             onChange={handleChange}
           />
           {selectedService && (
@@ -104,6 +127,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
             label="Email"
             type="email"
             placeholder="Masukkan Email Anda"
+            value={form.email_booking}
             onChange={handleChange}
           />
           <InputComponent
@@ -112,6 +136,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
             label="Nomor WhatsApp"
             type="number"
             placeholder="Masukkan Nomor WA Anda"
+            value={form.phone_number} 
             onChange={handleChange}
           />
           <DatePickerComp
@@ -123,7 +148,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-500"
+            className="bg-pink-500 hover:bg-pink-400 text-white font-semibold px-5 py-3 rounded-xl shadow-lg shadow-pink-500/30 transition-all duration-300 hover:scale-105"
           >
             Buat Pesanan
           </button>

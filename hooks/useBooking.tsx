@@ -17,7 +17,6 @@ export function useBooking() {
   const [error, setError] = useState("");
   const [services, setServices] = useState<Services[]>([]);
   const [bookings, setBookings] = useState<Bookings[]>([]);
-  const [detailBookings, setDetailBookings] = useState<BookingWithService[]>([])
   const [success, setSuccess] = useState(false);
 
   async function orderConfirmation(orderData: BookingWithService) {
@@ -35,7 +34,7 @@ export function useBooking() {
       service_name: orderData.services_tb.service_type,
       booking_date: formattedDate,
       booking_time: orderData.time,
-      booking_detail_link: `https://detailed-order//${orderData.booking_id}//${orderData.secret_token}`, // NOTE: nanti diubah pake link yg udh dibuat
+      booking_detail_link: `${process.env.NEXT_PUBLIC_BASE_URL}/detailBooking/${orderData.secret_token}`, 
       order_total: `Rp ${orderData.services_tb.price_service.toLocaleString("id-ID")}`,
     };
 
@@ -68,6 +67,11 @@ export function useBooking() {
         time: formData.time,
         status: "pending",
       });
+
+      const newBookingState = result
+
+      setBookings((prev) => [...prev, newBookingState])
+
       await orderConfirmation({
         ...result,
         time: formData.time
@@ -102,7 +106,6 @@ export function useBooking() {
         ]);
         setBookings(bookingRes);
         setServices(serviceRes);
-        setDetailBookings(bookingRes)
       } catch (err: any) {
         setError(err.message || "Failed fetch data");
       } finally {
@@ -117,7 +120,6 @@ export function useBooking() {
     submitBooking,
     bookings,
     services,
-    detailBookings,
     loading,
     error,
     success,
