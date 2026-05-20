@@ -64,7 +64,6 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
     });
   };
 
-  // EFEK PEMBERSIH INPUT: Jika proses di hook sukses, kosongkan isian form
   useEffect(() => {
     if (success && selectedService) {
       setForm({
@@ -148,7 +147,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
           />
           <button
             type="submit"
-            className="bg-pink-500 hover:bg-pink-400 text-white font-semibold px-5 py-3 rounded-xl shadow-lg shadow-pink-500/30 transition-all duration-300 hover:scale-105"
+            className="bg-pink-500 hover:bg-pink-400 cursor-pointer text-white font-semibold px-5 py-3 rounded-xl shadow-lg shadow-pink-500/30 transition-all duration-300 hover:scale-105"
           >
             Buat Pesanan
           </button>

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getBookingByToken } from "@/services/userServices";
 import { Card } from "flowbite-react";
 
@@ -7,13 +9,23 @@ type DetailProps = {
   };
 };
 
-export default async function DetailBooking({ params }: DetailProps) {
+export default async function DetailBooking({
+  params,
+}: DetailProps) {
   const { secret_token } = params;
 
   const detail = await getBookingByToken(secret_token);
+
   if (!detail) {
-    return <div>Booking tidak ditemukan</div>;
+    return (
+      <section className="min-h-screen flex items-center justify-center">
+        <h1 className="text-2xl font-bold text-white">
+          Booking tidak ditemukan
+        </h1>
+      </section>
+    );
   }
+
   return (
     <section className="min-h-screen flex items-center justify-center py-2">
       <Card className="w-full max-w-3xl rounded-3xl border-0 bg-white shadow-2xl">
@@ -42,7 +54,9 @@ export default async function DetailBooking({ params }: DetailProps) {
             <div className="rounded-2xl bg-gray-100 p-4">
               <p className="text-sm text-gray-500">Nama Pemesan</p>
 
-              <h2 className="mt-1 text-lg font-semibold">{detail.name}</h2>
+              <h2 className="mt-1 text-lg font-semibold">
+                {detail.name}
+              </h2>
             </div>
 
             <div className="rounded-2xl bg-gray-100 p-4">
@@ -54,15 +68,20 @@ export default async function DetailBooking({ params }: DetailProps) {
             </div>
 
             <div className="rounded-2xl bg-gray-100 p-4">
-              <p className="text-sm text-gray-500">Tanggal Booking</p>
+              <p className="text-sm text-gray-500">
+                Tanggal Booking
+              </p>
 
               <h2 className="mt-1 text-lg font-semibold">
                 {detail.date
-                  ? new Date(detail.date).toLocaleDateString("id-ID", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
+                  ? new Date(detail.date).toLocaleDateString(
+                      "id-ID",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )
                   : "Tanggal tidak tersedia"}
               </h2>
             </div>
@@ -70,24 +89,32 @@ export default async function DetailBooking({ params }: DetailProps) {
             <div className="rounded-2xl bg-gray-100 p-4">
               <p className="text-sm text-gray-500">Jam Booking</p>
 
-              <h2 className="mt-1 text-lg font-semibold">{detail.time}</h2>
+              <h2 className="mt-1 text-lg font-semibold">
+                {detail.time}
+              </h2>
             </div>
           </div>
 
           {/* Price */}
           <div className="flex items-center justify-between rounded-2xl bg-purple-100 px-6 py-5">
             <div>
-              <p className="text-sm text-purple-700">Total Harga</p>
+              <p className="text-sm text-purple-700">
+                Total Harga
+              </p>
 
               <h2 className="text-2xl font-bold text-purple-900">
-                Rp {detail.services_tb.price_service.toLocaleString("id-ID")}
+                Rp{" "}
+                {detail.services_tb.price_service.toLocaleString(
+                  "id-ID"
+                )}
               </h2>
             </div>
-            {/* Tambahan status pembayaran di sebelah kanan harga */}
+
             <span className="rounded-xl bg-amber-200 px-3 py-1.5 text-xs font-bold text-amber-800 uppercase tracking-wider">
               Belum Bayar
             </span>
           </div>
+
           {/* Button */}
           <button className="w-full cursor-pointer rounded-2xl bg-red-500 py-4 text-lg font-semibold text-white transition hover:bg-red-600">
             Cancel Booking
