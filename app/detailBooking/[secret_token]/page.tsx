@@ -1,15 +1,16 @@
 
 import { getBookingByToken } from "@/services/userServices";
 import { Card } from "flowbite-react";
+import { div } from "framer-motion/client";
 
 type DetailProps = {
-  params: Promise<{
+  params: {
     secret_token: string;
-  }>;
+  };
 };
 
 export default async function DetailBooking({ params }: DetailProps) {
-  const { secret_token } = await params;
+  const { secret_token } = params;
 
   const detail = await getBookingByToken(secret_token);
 
@@ -94,5 +95,6 @@ export default async function DetailBooking({ params }: DetailProps) {
         </div>
       </Card>
     </section>
+
   );
 }
