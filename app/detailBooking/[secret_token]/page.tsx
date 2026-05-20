@@ -1,4 +1,3 @@
-"use client"
 
 import { getBookingByToken } from "@/services/userServices";
 import { Card } from "flowbite-react";
