@@ -94,9 +94,9 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
           <InputComponent
             id="name"
             name="name"
-            label="Nama Lengkap"
+            label="Full Name"
             type="text"
-            placeholder="Masukkan Nama Lengkap Anda"
+            placeholder="Enter your name"
             value={form.name} 
             onChange={handleChange}
           />
@@ -105,7 +105,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
               <InputComponent
                 id="service_type"
                 name="service_type"
-                label="Jenis Pesanan"
+                label="Service Types"
                 type="text"
                 value={selectedService?.service_type || ""}
                 readonly
@@ -113,7 +113,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
               <InputComponent
                 id="price_service"
                 name="price_service"
-                label="Harga Pemesanan"
+                label="Order Price"
                 type="text"
                 value={`Rp ${selectedService?.price_service.toLocaleString("id-ID") || ""}`}
                 readonly
@@ -125,16 +125,17 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
             name="email_booking"
             label="Email"
             type="email"
-            placeholder="Masukkan Email Anda"
+            placeholder="Enter Your Email"
             value={form.email_booking}
             onChange={handleChange}
           />
           <InputComponent
             id="phone_number"
             name="phone_number"
-            label="Nomor WhatsApp"
+            label="Phone Number"
             type="number"
-            placeholder="Masukkan Nomor WA Anda"
+            placeholder="Feel free to use a dummy phone number."
+            minLength={13}
             value={form.phone_number} 
             onChange={handleChange}
           />
@@ -149,7 +150,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
             type="submit"
             className="bg-pink-500 hover:bg-pink-400 cursor-pointer text-white font-semibold px-5 py-3 rounded-xl shadow-lg shadow-pink-500/30 transition-all duration-300 hover:scale-105"
           >
-            Buat Pesanan
+            Make Order
           </button>
         </form>
       </section>

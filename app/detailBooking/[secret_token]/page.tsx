@@ -15,7 +15,7 @@ export default async function DetailBooking({ params }: DetailProps) {
     return (
       <section className="min-h-screen flex items-center justify-center">
         <h1 className="text-2xl font-bold">
-          Booking tidak ditemukan
+          Booking Not Found
         </h1>
       </section>
     );
@@ -38,7 +38,7 @@ export default async function DetailBooking({ params }: DetailProps) {
           </h1>
 
           <p className="mt-2 text-sm text-white/80">
-            Detail booking layanan kamu
+            Your Booking Details
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export default async function DetailBooking({ params }: DetailProps) {
         <div className="space-y-3 px-4 py-4 text-gray-800">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div className="rounded-2xl bg-gray-100 p-4">
-              <p className="text-sm text-gray-500">Nama Pemesan</p>
+              <p className="text-sm text-gray-500">Customer Name</p>
 
               <h2 className="mt-1 text-lg font-semibold">{detail.name}</h2>
             </div>
@@ -60,11 +60,11 @@ export default async function DetailBooking({ params }: DetailProps) {
             </div>
 
             <div className="rounded-2xl bg-gray-100 p-4">
-              <p className="text-sm text-gray-500">Tanggal Booking</p>
+              <p className="text-sm text-gray-500">Booking Date</p>
 
               <h2 className="mt-1 text-lg font-semibold">
                 {detail.date
-                  ? new Date(detail.date).toLocaleDateString("id-ID", {
+                  ? new Date(detail.date).toLocaleDateString("en", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
@@ -74,7 +74,7 @@ export default async function DetailBooking({ params }: DetailProps) {
             </div>
 
             <div className="rounded-2xl bg-gray-100 p-4">
-              <p className="text-sm text-gray-500">Jam Booking</p>
+              <p className="text-sm text-gray-500">Time Booking</p>
 
               <h2 className="mt-1 text-lg font-semibold">{detail.time}</h2>
             </div>
@@ -83,7 +83,7 @@ export default async function DetailBooking({ params }: DetailProps) {
           {/* Price */}
           <div className="flex items-center justify-between rounded-2xl bg-purple-100 px-6 py-5">
             <div>
-              <p className="text-sm text-purple-700">Total Harga</p>
+              <p className="text-sm text-purple-700">Total Price</p>
 
               <h2 className="text-2xl font-bold text-purple-900">
                 Rp {detail.services_tb.price_service.toLocaleString("id-ID")}
@@ -91,7 +91,7 @@ export default async function DetailBooking({ params }: DetailProps) {
             </div>
             {/* Tambahan status pembayaran di sebelah kanan harga */}
             <span className="rounded-xl bg-amber-200 px-3 py-1.5 text-xs font-bold text-amber-800 uppercase tracking-wider">
-              Belum Bayar
+              Pending Payment
             </span>
           </div>
           {/* Button */}

@@ -5,7 +5,6 @@ import { Bookings } from "@/types/bookingsType";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { HiCalendar } from "react-icons/hi";
-import {id} from "date-fns/locale"
 
 type Props = {
   date: Date | null;
@@ -49,9 +48,8 @@ export function DatePickerComp({
               onDateChange(d);
               onTimeChange("", "", ""); 
             }}
-            locale={id}
             minDate={new Date()}
-            placeholderText="Pilih tanggal"
+            placeholderText="Choose Schedule"
             dateFormat="dd MMM yyyy"
             className="w-48 pl-10 pr-3 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all "
           />
@@ -69,7 +67,7 @@ export function DatePickerComp({
           className="rounded-lg w-44 px-3 py-2 border border-white/20 text-white placeholder:text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all "
         >
           <option value="" disabled>
-            Pilih Jam
+            Select Time
           </option>
           
           {services.map((slot, i) => {
@@ -87,7 +85,7 @@ export function DatePickerComp({
                 className="bg-pink-500 hover:bg-pink-400"
               >
                 {/* Modifikasi teks opsi secara ekstrem agar perubahan langsung terlihat */}
-                {isBooked ? `⛔ [PENUH] ${displayValue}` : displayValue}
+                {isBooked ? `⛔ [Full] ${displayValue}` : displayValue}
               </option>
             );
           })}

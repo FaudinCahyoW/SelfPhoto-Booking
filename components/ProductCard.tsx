@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Drawer, DrawerItems } from "flowbite-react";
+import { Drawer, DrawerItems } from "flowbite-react";
 import { useState, useEffect } from "react";
 import { BookingForm } from "@/components/BookingForm";
 import { useBooking } from "@/hooks/useBooking";
@@ -31,7 +31,7 @@ export default function ProductCard() {
         {services.map((b) => (
           <div
             key={b.service_id}
-            className=" overflow-hidden rounded-3xl bg-card border border-white/30 shadow-xl transition hover:scale-[1.02] flex flex-col h-full "
+            className=" overflow-hidden rounded-3xl bg-card/60 border border-white/30 shadow-xl transition hover:scale-[1.02] flex flex-col h-full "
           >
             {/* Image */}
             <img
@@ -65,7 +65,7 @@ export default function ProductCard() {
                     setIsOpen(true);
                   }}
                 >
-                  Pesan
+                  Order Now
                 </button>
               </div>
             </div>

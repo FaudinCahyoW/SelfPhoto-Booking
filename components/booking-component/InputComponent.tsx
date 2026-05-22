@@ -9,6 +9,7 @@ type InputProps = {
   name: string;
   readonly?: boolean;
   value?: string | number;
+  minLength?: number; 
 };
 
 export function InputComponent({
@@ -17,6 +18,7 @@ export function InputComponent({
   value,
   type,
   placeholder,
+  minLength,
   onChange,
   id,
   name,
@@ -35,6 +37,7 @@ export function InputComponent({
         placeholder={placeholder}
         onChange={onChange}
         readOnly={readonly}
+        minLength={minLength}
         required
         className="w-full px-3 py-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all"
       />
