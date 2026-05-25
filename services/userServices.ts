@@ -88,15 +88,17 @@ export async function getBookingByToken(
 }
 
 export async function deleteBookingByToken(secret_token: string) {
-    const supabase = getSupabase();
+  const supabase = getSupabase();
 
   const { data, error } = await supabase
     .from("bookings_tb")
     .delete()
-    .eq("secret_token", secret_token);
+    .eq("secret_token", secret_token)
+    .select("*");
 
-    if (error){
-      throw new Error(error.message)
-    }
-    return data;
+  console.log({ data, error });
+
+  if (error) throw new Error(error.message);
+
+  return data;
 }
