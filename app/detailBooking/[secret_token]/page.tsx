@@ -3,13 +3,13 @@ import { getBookingByToken } from "@/services/userServices";
 import { Card } from "flowbite-react";
 
 type DetailProps = {
-  params: {
+  params: Promise<{
     secret_token: string;
-  };
+  }>;
 };
 
 export default async function DetailBooking({ params }: DetailProps) {
-  const { secret_token } = params;
+  const { secret_token } = await params;
 
   const detail = await getBookingByToken(secret_token);
 
@@ -47,7 +47,6 @@ export default async function DetailBooking({ params }: DetailProps) {
         {/* Content */}
         <div className="space-y-3 px-4 py-4 text-gray-800">
 
-          {/* INFO */}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div className="rounded-2xl bg-gray-100 p-4">
               <p className="text-sm text-gray-500">Customer Name</p>
@@ -80,7 +79,7 @@ export default async function DetailBooking({ params }: DetailProps) {
             </div>
           </div>
 
-          {/* PRICE */}
+          {/* Price */}
           <div className="flex items-center justify-between rounded-2xl bg-purple-100 px-6 py-5">
             <div>
               <p className="text-sm text-purple-700">Total Price</p>
@@ -94,7 +93,7 @@ export default async function DetailBooking({ params }: DetailProps) {
             </span>
           </div>
 
-          {/* CANCEL BUTTON */}
+          {/* BUTTON FIXED */}
           <CancelButton id={detail.booking_id} />
 
         </div>
