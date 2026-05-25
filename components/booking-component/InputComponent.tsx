@@ -1,31 +1,44 @@
 "use client";
 
-type InputProps = {
-  label: string;
-  type: string;
-  placeholder?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  id: string;
-  name: string;
-  readonly?: boolean;
-  value?: string | number;
-  minLength?: number; 
-};
+import React from "react";
+
+import { ErrorTextComponent } from "./ErrorText";
+
+type InputProps =
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    label: string;
+    errorMessage?: string;
+  };
 
 export function InputComponent({
   label,
-  readonly = false,
-  value,
+  errorMessage,
   type,
   placeholder,
-  minLength,
-  onChange,
   id,
   name,
+  value,
+  onChange,
+  minLength,
+  readOnly = false,
+  className,
+  ...props
 }: InputProps) {
+
   return (
+
     <div className="mb-4">
-      <label className="block mb-2 text-sm font-medium text-gray-200">
+
+      <label
+        htmlFor={id}
+        className="
+          block
+          mb-2
+          text-sm
+          font-medium
+          text-gray-200
+        "
+      >
         {label}
       </label>
 
@@ -36,11 +49,37 @@ export function InputComponent({
         value={value}
         placeholder={placeholder}
         onChange={onChange}
-        readOnly={readonly}
+        readOnly={readOnly}
         minLength={minLength}
         required
-        className="w-full px-3 py-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all"
+        {...props}
+        className={`
+          w-full
+          px-3
+          py-2.5
+          rounded-xl
+          bg-white/10
+          backdrop-blur-md
+          border
+          ${
+            errorMessage
+              ? "border-red-400 focus:ring-red-400 focus:border-red-400"
+              : "border-white/20 focus:ring-pink-400 focus:border-pink-400"
+          }
+          text-white
+          placeholder:text-gray-400
+          shadow-sm
+          focus:outline-none
+          focus:ring-2
+          transition-all
+          ${className || ""}
+        `}
       />
+
+      <ErrorTextComponent
+        message={errorMessage}
+      />
+
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import CancelButton from "@/components/CancelButton";
 import { getBookingByToken } from "@/services/userServices";
 import { Card } from "flowbite-react";
 
@@ -94,10 +95,7 @@ export default async function DetailBooking({ params }: DetailProps) {
               Pending Payment
             </span>
           </div>
-          {/* Button */}
-          <button className="w-full cursor-pointer rounded-2xl bg-red-500 py-4 text-lg font-semibold text-white transition hover:bg-red-600">
-            Cancel Booking
-          </button>
+            <CancelButton secret_token={(await params).secret_token}/>
         </div>
       </Card>
     </section>

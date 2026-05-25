@@ -1,105 +1,93 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
+
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { bookingSchema } from "@/schemas/bookingSchema";
+
+import { BookingFormType } from "@/types/bookingFormType";
+
 import { InputComponent } from "@/components/booking-component/InputComponent";
+
 import { DatePickerComp } from "@/components/booking-component/DatePickerComp";
+
 import { Services } from "@/types/serviceType";
+
 import { useBooking } from "@/hooks/useBooking";
+
+import { ErrorTextComponent } from "./booking-component/ErrorText";
 
 type PropsSelectedService = {
   selectedService: Services | null;
 };
 
 export function BookingForm({ selectedService }: PropsSelectedService) {
-  // Ambil state 'success' bawaan dari hook useBooking Anda
-  const { bookings, submitBooking, success } = useBooking();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<BookingFormType>({
+    resolver: zodResolver(bookingSchema),
 
-  const [form, setForm] = useState({
-    service_id: "",
-    name: "",
-    email_booking: "",
-    phone_number: "",
-    date: null as Date | null,
-    time: "",
+    defaultValues: {
+      service_id: "",
+      name: "",
+      email_booking: "",
+      phone_number: "",
+      date: "",
+      time: "",
+    },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const { bookings, submitBooking, success } = useBooking();
 
-  const handleDateChange = (date: Date | null) => {
-    setForm((prev) => ({
-      ...prev,
-      date,
-    }));
-  };
+  const selectedDate = watch("date");
 
-  const handleTimeChange = (start: string, end: string, full: string) => {
-    setForm((prev) => ({
-      ...prev,
-      time: full,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedService) return;
-
-    // Format tanggal lokal (YYYY-MM-DD) untuk backend Anda
-    const year = form.date?.getFullYear();
-    const month = String((form.date?.getMonth() || 0) + 1).padStart(2, "0");
-    const day = String(form.date?.getDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-
-    // Jalankan submit ke hook (Toast loading & success otomatis terpicu dari dalam hook)
-    await submitBooking({
-      service_id: selectedService.service_id,
-      name: form.name,
-      email_booking: form.email_booking,
-      phone_number: form.phone_number,
-      date: formattedDate,
-      time: form.time,
-    });
-  };
-
-  useEffect(() => {
-    if (success && selectedService) {
-      setForm({
-        service_id: selectedService.service_id,
-        name: "",
-        email_booking: "",
-        phone_number: "",
-        date: null,
-        time: "",
-      });
-    }
-  }, [success, selectedService]);
+  const selectedTime = watch("time");
 
   useEffect(() => {
     if (selectedService) {
-      setForm((prev) => ({
-        ...prev,
-        service_id: selectedService.service_id,
-      }));
+      setValue("service_id", selectedService.service_id);
     }
-  }, [selectedService]);
+  }, [selectedService, setValue]);
+
+  useEffect(() => {
+    if (success) {
+      reset();
+    }
+  }, [success, reset]);
+
+  const onSubmit = async (data: BookingFormType) => {
+    try {
+      await submitBooking(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <main>
-      <h1 className="mb-5">Silahkan Buat Pesananmu</h1>
+      <h1 className="mb-5 text-3xl font-bold">Silahkan Buat Pesananmu</h1>
+
       <section>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* NAME */}
           <InputComponent
             id="name"
-            name="name"
             label="Full Name"
             type="text"
             placeholder="Enter your name"
-            value={form.name} 
-            onChange={handleChange}
+            errorMessage={errors.name?.message}
+            {...register("name")}
           />
+
+          {/* SERVICE */}
           {selectedService && (
             <>
               <InputComponent
@@ -107,48 +95,84 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
                 name="service_type"
                 label="Service Types"
                 type="text"
-                value={selectedService?.service_type || ""}
-                readonly
+                value={selectedService.service_type}
+                readOnly
               />
+
               <InputComponent
                 id="price_service"
                 name="price_service"
                 label="Order Price"
                 type="text"
-                value={`Rp ${selectedService?.price_service.toLocaleString("id-ID") || ""}`}
-                readonly
+                value={`Rp ${selectedService.price_service.toLocaleString(
+                  "id-ID",
+                )}`}
+                readOnly
               />
             </>
           )}
+
+          {/* EMAIL */}
           <InputComponent
             id="email_booking"
-            name="email_booking"
             label="Email"
             type="email"
             placeholder="Enter Your Email"
-            value={form.email_booking}
-            onChange={handleChange}
+            errorMessage={errors.email_booking?.message}
+            {...register("email_booking")}
           />
+
+          {/* PHONE */}
           <InputComponent
             id="phone_number"
-            name="phone_number"
             label="Phone Number"
-            type="number"
+            type="text"
             placeholder="Feel free to use a dummy phone number."
-            minLength={13}
-            value={form.phone_number} 
-            onChange={handleChange}
+            errorMessage={errors.phone_number?.message}
+            {...register("phone_number")}
           />
+
+          {/* DATE PICKER */}
           <DatePickerComp
-            date={form.date}
-            timeProp={form.time}
+            date={selectedDate ? new Date(selectedDate) : null}
+            timeProp={selectedTime}
             bookings={bookings}
-            onDateChange={handleDateChange}
-            onTimeChange={handleTimeChange}
+            onDateChange={(date) => {
+              if (!date) return;
+
+              const formattedDate = `${date.getFullYear()}-${String(
+                date.getMonth() + 1,
+              ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+              setValue("date", formattedDate);
+            }}
+            onTimeChange={(start, end, full) => {
+              setValue("time", full);
+            }}
           />
+
+          <ErrorTextComponent message={errors.date?.message} />
+
+          <ErrorTextComponent message={errors.time?.message} />
+
+          {/* SUBMIT */}
           <button
             type="submit"
-            className="bg-pink-500 hover:bg-pink-400 cursor-pointer text-white font-semibold px-5 py-3 rounded-xl shadow-lg shadow-pink-500/30 transition-all duration-300 hover:scale-105"
+            className="
+              bg-pink-500
+              hover:bg-pink-400
+              cursor-pointer
+              text-white
+              font-semibold
+              px-5
+              py-3
+              rounded-xl
+              shadow-lg
+              shadow-pink-500/30
+              transition-all
+              duration-300
+              hover:scale-105
+            "
           >
             Make Order
           </button>
