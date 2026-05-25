@@ -1,17 +1,17 @@
-import { deleteBookingByToken } from "@/services/userServices";
+import { deleteBookingByBookingId } from "@/services/userServices";
 import { useState } from "react";
 
-export function useDeleteBooking(){
-    const [loading, setLoading] = useState(false)
+export function useDeleteBooking() {
+  const [loading, setLoading] = useState(false);
 
-    const deleteBooking = async (secret_token: string) => {
-        setLoading(true)
-        try{
-            await deleteBookingByToken(secret_token)
-        }finally{
-            setLoading(false)
-        }
+  const deleteBooking = async (booking_id: string) => {
+    setLoading(true);
+    try {
+      await deleteBookingByBookingId(booking_id);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return {deleteBooking, loading}
+  return { deleteBooking, loading };
 }
