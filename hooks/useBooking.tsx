@@ -47,54 +47,76 @@ export function useBooking() {
   }
 
   async function submitBooking(formData: BookingFormType) {
-    const toastId = toast.loading('Creating your booking...')
-    try {
-      setLoading(true);
+  const toastId = toast.loading("Creating your booking...");
 
-      const bookingId = `BK-${nanoid(7)}`;
-      const secretToken = `ST-${nanoid(15)}`;
+  try {
+    setLoading(true);
 
-      console.log("DEBUG TIME:", formData.time);
-
-      const result = await createBooking({
-        booking_id: bookingId,
-        service_id: formData.service_id,
-        name: formData.name,
-        email_booking: formData.email_booking,
-        phone_number: formData.phone_number,
-        secret_token: secretToken,
-        date: formData.date,
-        time: formData.time,
-        status: "pending",
-      });
-
-      const newBookingState = result
-
-      setBookings((prev) => [...prev, newBookingState])
-
-      await orderConfirmation({
-        ...result,
-        time: formData.time
-      });
-
-      //Notifikasi Sukses
-      toast.success('Booking Success, Please Check your Email.', {id:toastId})
-
-      setSuccess(true);
-      return {
-        bookingId,
-        secretToken,
-      };
-    } catch (err: any) {
-      console.log(err);
-      const message = "Booking failed. Please complete all required fields."
-      setError(message);
-
-      toast.error(message, {id:toastId})
-    } finally {
-      setLoading(false);
+    if (
+      !formData.name?.trim() ||
+      !formData.email_booking?.trim() ||
+      !formData.phone_number?.trim() ||
+      !formData.date ||
+      !formData.time?.trim()
+    ) {
+      throw new Error(
+        "Please complete all required fields."
+      );
     }
+
+    const bookingId = `BK-${nanoid(7)}`;
+    const secretToken = `ST-${nanoid(15)}`;
+
+    console.log("DEBUG TIME:", formData.time);
+
+    const result = await createBooking({
+      booking_id: bookingId,
+      service_id: formData.service_id,
+      name: formData.name,
+      email_booking: formData.email_booking,
+      phone_number: formData.phone_number,
+      secret_token: secretToken,
+      date: formData.date,
+      time: formData.time,
+      status: "pending",
+    });
+
+    const newBookingState = result;
+
+    setBookings((prev) => [...prev, newBookingState]);
+
+    await orderConfirmation({
+      ...result,
+      time: formData.time,
+    });
+
+    toast.success(
+      "Booking Success, Please Check your Email.",
+      { id: toastId }
+    );
+
+    setSuccess(true);
+
+    return {
+      bookingId,
+      secretToken,
+    };
+
+  } catch (err: any) {
+    console.log("BOOKING ERROR:", err);
+
+    const message =
+      err?.message ||
+      "Booking failed. Please try again.";
+
+    setError(message);
+
+    toast.error(message, { id: toastId });
+
+  } finally {
+    setLoading(false);
   }
+}
 
   useEffect(() => {
     async function fetchData() {

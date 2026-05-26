@@ -66,7 +66,12 @@ export default function ProductCard() {
                   type="button"
                   className="cursor-pointer mt-3 w-full py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400
                   text-white text-sm font-semibold transition"
-                  onClick={() => setIsOpen(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    setSelectedService(b);
+                    setIsOpen(true);
+                  }}
                 >
                   Book Now
                 </button>
