@@ -47,7 +47,7 @@ export function useBooking() {
   }
 
   async function submitBooking(formData: BookingFormType) {
-    const toastId = toast.loading('Sedang memproses booking...')
+    const toastId = toast.loading('Creating your booking...')
     try {
       setLoading(true);
 
@@ -78,7 +78,7 @@ export function useBooking() {
       });
 
       //Notifikasi Sukses
-      toast.success('Booking Berhasil, Silahkan Cek Email Kamu.', {id:toastId})
+      toast.success('Booking Success, Please Check your Email.', {id:toastId})
 
       setSuccess(true);
       return {
@@ -87,7 +87,7 @@ export function useBooking() {
       };
     } catch (err: any) {
       console.log(err);
-      const message = err.message || "Gagal membuat booking"
+      const message = "Booking failed. Please complete all required fields."
       setError(message);
 
       toast.error(message, {id:toastId})

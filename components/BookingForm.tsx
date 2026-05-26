@@ -73,7 +73,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
 
   return (
     <main>
-      <h1 className="mb-5 text-3xl font-bold">Silahkan Buat Pesananmu</h1>
+      <h1 className="mb-5 text-3xl font-bold">Please Make Your Order</h1>
 
       <section>
         <form onSubmit={handleSubmit(onSubmit)}>

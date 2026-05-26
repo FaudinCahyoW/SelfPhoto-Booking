@@ -21,21 +21,22 @@ export function DatePickerComp({
   onDateChange,
   onTimeChange,
 }: Props) {
-
   const { services } = useBooking();
 
-  const bookedSlotsSimulasi = bookings.filter((booking) => {
-    const bookingDate = new Date(booking.date).toDateString()
+  const bookedSlotsSimulasi = bookings
+    .filter((booking) => {
+      const bookingDate = new Date(booking.date).toDateString();
 
-    const selectedDate = date?.toDateString()
+      const selectedDate = date?.toDateString();
 
-    return bookingDate === selectedDate
-  }).map((booking) => booking.time);
+      return bookingDate === selectedDate;
+    })
+    .map((booking) => booking.time);
 
   return (
     <div className="mb-7">
       <label className="block mb-2.5 text-sm font-medium">
-        Pilih Jadwal Pemesanan
+        Select Booking Schedule{" "}
       </label>
 
       <div className="flex gap-3 items-center">
@@ -46,7 +47,7 @@ export function DatePickerComp({
             selected={date}
             onChange={(d: Date | null) => {
               onDateChange(d);
-              onTimeChange("", "", ""); 
+              onTimeChange("", "", "");
             }}
             minDate={new Date()}
             placeholderText="Choose Schedule"
@@ -69,14 +70,14 @@ export function DatePickerComp({
           <option value="" disabled>
             Select Time
           </option>
-          
+
           {services.map((slot, i) => {
             // Menggabungkan data dari tabel service: "09:00 - 10:00"
             const displayValue = `${slot.start_time} - ${slot.end_time}`;
 
             // Pengecekan apakah jam ini ada di dalam list simulasi booked
             const isBooked = bookedSlotsSimulasi.includes(displayValue);
-            
+
             return (
               <option
                 key={i}

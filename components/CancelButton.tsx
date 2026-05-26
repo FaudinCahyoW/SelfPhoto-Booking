@@ -21,7 +21,6 @@ export default function CancelButton({ id, children }: TokenProps) {
         await deleteBooking(id)
         toast.success("Booking is cancelled")
         
-        // PENTING: Tambahkan baris ini agar komponen mendeteksi sukses dan merender ucapan terima kasih
         setIsCancelled(true) 
     } catch (error) {
         toast.error("Failed to cancel booking")

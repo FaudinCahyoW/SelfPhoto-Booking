@@ -4,16 +4,12 @@ import { Drawer, DrawerItems } from "flowbite-react";
 import { useState, useEffect } from "react";
 
 import { BookingForm } from "@/components/BookingForm";
-
 import { useBooking } from "@/hooks/useBooking";
-
 import { Services } from "@/types/serviceType";
 
 export default function ProductCard() {
   const [isOpen, setIsOpen] = useState(false);
-
   const [selectedService, setSelectedService] = useState<Services | null>(null);
-
   const { services } = useBooking();
 
   const [drawerPosition, setDrawerPosition] = useState<"right" | "bottom">(
@@ -22,78 +18,75 @@ export default function ProductCard() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        setDrawerPosition("bottom");
-      } else {
-        setDrawerPosition("right");
-      }
+      setDrawerPosition(window.innerWidth < 1024 ? "bottom" : "right");
     };
 
     handleResize();
-
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <>
-      <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {services.map((b) => (
-          <div
-            key={b.service_id}
-            className="overflow-hidden rounded-3xl bg-card/60 border border-white/30 shadow-xl transition hover:scale-[1.02] flex flex-col h-full"
-          >
-            {/* Image */}
-            <img
-              className="w-full h-56 object-cover"
-              src={b.service_img}
-              alt={b.service_type}
-            />
+    <div className="w-full bg-[#fefefe] text-gray-900 overflow-x-hidden">
+      {/* CONTENT */}
+      <div className="max-w-6xl mx-auto px-4 pb-10 space-y-8">
+        {/* SECTION LABEL */}
+        <div className="text-xs uppercase tracking-widest text-gray-400">
+          Available Packages
+        </div>
 
-            {/* Content */}
-            <div className="p-6 text-black flex flex-col flex-1">
-              <h5 className="mb-3 text-2xl font-semibold tracking-tight">
-                {b.service_type}
-              </h5>
+        {/* SERVICES */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((b) => (
+            <div
+              key={b.service_id}
+              onClick={() => setSelectedService(b)}
+              className={`rounded-3xl overflow-hidden bg-white border border-gray-200
+              shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl
+              ${selectedService?.service_id === b.service_id ? "ring-2 ring-cyan-400" : ""}`}
+            >
+              <img
+                className="w-full h-44 object-cover"
+                src={b.service_img}
+                alt={b.service_type}
+              />
 
-              <p className="mb-6 text-zinc-700 line-clamp-3">
-                {b.service_desc}
-              </p>
+              <div className="p-5 flex flex-col">
+                <h5 className="text-lg font-semibold">{b.service_type}</h5>
 
-              <div className="flex items-center justify-between mt-auto">
-                <span className="text-2xl font-extrabold">
+                <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                  {b.service_desc}
+                </p>
+
+                <div className="mt-3 text-lg font-black text-cyan-600">
                   Rp {b.price_service.toLocaleString("id-ID")}
-                </span>
+                </div>
 
                 <button
                   type="button"
-                  className="bg-orange-500 hover:bg-orange-400 cursor-pointer text-white font-semibold rounded-xl px-5 py-2.5 shadow-lg"
-                  onClick={() => {
-                    setSelectedService(b);
-
-                    setIsOpen(true);
-                  }}
+                  className="cursor-pointer mt-3 w-full py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400
+                  text-white text-sm font-semibold transition"
+                  onClick={() => setIsOpen(true)}
                 >
-                  Order Now
+                  Book Now
                 </button>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+      {/* DRAWER */}
 
       <Drawer
         open={isOpen}
         onClose={() => setIsOpen(false)}
         position={drawerPosition}
-        className="bg-linear-to-r from-[#243B55] to-[#141E30] text-white z-50 h-[60vh] rounded-t-2xl sm:h-[45vh] lg:h-full lg:w-4/12 lg:rounded-t-none lg:rounded-l-2xl " >
+        className="bg-linear-to-r from-[#243B55] to-[#141E30] text-white z-50 h-[60vh] rounded-t-2xl sm:h-[45vh] lg:h-full lg:w-4/12 lg:rounded-l-2xl"
+      >
         <DrawerItems>
           <BookingForm selectedService={selectedService} />
         </DrawerItems>
       </Drawer>
-    </>
+    </div>
   );
 }

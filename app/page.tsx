@@ -1,9 +1,11 @@
-import ProductCard from "@/components/ProductCard"
+import ProductCard from "@/components/ProductCard";
 
-export default async function Home(){
-  return(    
-  <main className="p-6 max-w-full"> 
-    <ProductCard/>
-  </main>
-  )
+export default async function Home() {
+  return (
+    <main className="w-full">
+      <div className="px-6 py-6">
+        <ProductCard />
+      </div>
+    </main>
+  );
 }

@@ -7,18 +7,9 @@
 ========================= */
 
 :root {
-  /* Background */
-  --background: #C4B5FD;
-  --secondary: #FFB4C1;
-  --tertiary: #FFD6A5;
-
-  /* Card */
-  --card: #ffff00;
-
-  /* Accent */
-  --accent: #F97316;
-
-  /* Text */
+  --background: #fefefe;
+  --secondary: #fefefe;
+  --tertiary: #fefefe;
   --foreground: #18181B;
 }
 
@@ -36,33 +27,30 @@
   --color-accent: var(--accent);
 
   --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-
-  /* --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono); */
 }
 
 /* =========================
-   GLOBAL
+   GLOBAL RESET (INI PENTING)
+========================= */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* =========================
+   BODY BACKGROUND STYLE
 ========================= */
 
 body {
   background:
-    radial-gradient(
-      circle at top left,
-      var(--secondary),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      var(--tertiary),
-      transparent 1%
-    ),
+    radial-gradient(circle at top left, var(--secondary), transparent 30%),
+    radial-gradient(circle at bottom right, var(--tertiary), transparent 30%),
     var(--background);
 
   color: var(--foreground);
-
   font-family: Arial, Helvetica, sans-serif;
-
-  min-height: 100vh;
 }
