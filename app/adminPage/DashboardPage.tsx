@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const todayOrdersCount = orders.filter((o) => o.date === todayStr).length;
 
   return (
-    <div className="flex min-h-screen font-sans">
+    <div className="flex min-h-screen font-sans p-4">
       <main className="w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <div className="p-4 bg-white rounded-lg border border-slate-200">
