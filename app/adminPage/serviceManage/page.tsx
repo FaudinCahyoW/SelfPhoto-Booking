@@ -21,10 +21,9 @@ export default function ServicePage() {
 
   useEffect(() => {
     if (success) {
-      reset(),
-      setPreview(null)
+      (reset(), setPreview(null));
     }
-  }, [success, reset])
+  }, [success, reset]);
 
   const onSubmit = async (data: ServiceFormType) => {
     try {
@@ -40,6 +39,9 @@ export default function ServicePage() {
         onSubmit={handleSubmit(onSubmit)}
         inputs={
           <div className="flex flex-col space-y-4 w-full text-left">
+            <span className="text-emerald-400 font-bold tracking-wider uppercase pt-2.5">
+              Add Booking Content
+            </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
               <InputComponent
                 id="service_type"
@@ -90,7 +92,7 @@ export default function ServicePage() {
               <div className="flex items-center justify-center w-full">
                 <label
                   htmlFor="service_img"
-                  className="relative flex items-center justify-center w-full h-50 bg-neutral-900/30 border border-dashed border-gray-800 rounded-2xl cursor-pointer hover:bg-neutral-900/60 hover:border-gray-700 transition-all duration-200 overflow-hidden "
+                  className="relative flex items-center justify-center w-full h-45 bg-neutral-900/30 border border-dashed border-gray-800 rounded-2xl cursor-pointer hover:bg-neutral-900/60 hover:border-gray-700 transition-all duration-200 overflow-hidden "
                 >
                   {preview ? (
                     <>

@@ -42,7 +42,7 @@ export default function AdminLayout({
           </h1>
           <p className="mt-6 max-w-xl text-gray-400 text-md text-center">
               PLEASE LOGIN TO ADMIN DASHBOARD
-            </p>
+          </p>
           {children}
         </main>
       </div>
