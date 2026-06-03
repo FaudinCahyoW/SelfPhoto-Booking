@@ -4,6 +4,4 @@ export type Services = {
     service_desc:string
     service_type:string
     price_service:number
-    start_time:string
-    end_time:string
 }

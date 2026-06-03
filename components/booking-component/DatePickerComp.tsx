@@ -21,7 +21,7 @@ export function DatePickerComp({
   onDateChange,
   onTimeChange,
 }: Props) {
-  const { services } = useBooking();
+  const { timeSlots } = useBooking();
 
   const bookedSlotsSimulasi = bookings
     .filter((booking) => {
@@ -77,7 +77,7 @@ export function DatePickerComp({
             Select Time
           </option>
 
-          {services.map((slot, i) => {
+          {timeSlots.map((slot, i) => {
             // Menggabungkan data dari tabel service: "09:00 - 10:00"
             const displayValue = `${slot.start_time} - ${slot.end_time}`;
 

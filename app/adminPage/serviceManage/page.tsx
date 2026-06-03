@@ -13,8 +13,6 @@ export default function ServicePage() {
       service_type: "",
       service_desc: "",
       price_service: undefined,
-      start_time: "",
-      end_time: "",
       imageFile: null,
     },
   });
@@ -65,34 +63,6 @@ export default function ServicePage() {
               />
             </div>
 
-            <section className="space-y-3 w-full">
-              <h3 className="text-gray-300 font-semibold text-sm text-center sm:text-left">
-                Add Schedule
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border border-gray-900 rounded-2xl p-4 bg-neutral-900/30">
-                <InputComponent
-                  id="start_time"
-                  label="Start Time"
-                  type="text"
-                  placeholder="Enter start time"
-                  {...register("start_time", {
-                    required: true,
-                  })}
-                />
-
-                <InputComponent
-                  id="end_time"
-                  label="End Time"
-                  type="text"
-                  placeholder="Enter end time"
-                  {...register("end_time", {
-                    required: true,
-                  })}
-                />
-              </div>
-            </section>
-
             <div className="flex flex-col gap-1.5 w-full">
               <label
                 htmlFor="service_desc"
@@ -108,7 +78,7 @@ export default function ServicePage() {
                 {...register("service_desc", {
                   required: true,
                 })}
-                className="w-full px-3 py-2 bg-neutral-900 text-gray-200 border border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 placeholder:text-gray-600 resize-y transition-all text-sm"
+                className="w-full px-3 py-2 h-44 bg-neutral-900 text-gray-200 border border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 placeholder:text-gray-600 resize-y transition-all text-sm"
               />
             </div>
 
@@ -120,14 +90,14 @@ export default function ServicePage() {
               <div className="flex items-center justify-center w-full">
                 <label
                   htmlFor="service_img"
-                  className="relative flex items-center justify-center w-full min-h-36 bg-neutral-900/30 border border-dashed border-gray-800 rounded-2xl cursor-pointer hover:bg-neutral-900/60 hover:border-gray-700 transition-all duration-200 overflow-hidden "
+                  className="relative flex items-center justify-center w-full h-50 bg-neutral-900/30 border border-dashed border-gray-800 rounded-2xl cursor-pointer hover:bg-neutral-900/60 hover:border-gray-700 transition-all duration-200 overflow-hidden "
                 >
                   {preview ? (
                     <>
                       <img
                         src={preview}
                         alt="Preview"
-                        className=" w-80 h-36 object-cover"
+                        className="w-64 object-cover"
                       />
 
                       <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition flex items-center justify-center">

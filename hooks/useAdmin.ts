@@ -28,9 +28,7 @@ export function useAdmin() {
         service_id: serviceId,
         service_type: formService.service_type,
         service_desc: formService.service_desc,
-        price_service:formService.price_service,
-        start_time:formService.start_time,
-        end_time:formService.end_time,        
+        price_service:formService.price_service,       
       },
       formService.imageFile!
     )

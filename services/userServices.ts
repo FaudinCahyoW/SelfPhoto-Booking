@@ -66,6 +66,19 @@ export async function getDataServices() {
 }
 
 // =========================
+// GET TIME SLOT
+// =========================
+export  async function getDataTimeSlot() {
+  const supabase = getSupabase()
+
+   const { data, error } = await supabase.from("time_tb").select();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
+// =========================
 // GET BOOKING BY TOKEN
 // =========================
 export async function getBookingByToken(

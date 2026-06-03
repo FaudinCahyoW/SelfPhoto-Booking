@@ -4,6 +4,7 @@ import {
   createBooking,
   getDataServices,
   getDataBookings,
+  getDataTimeSlot
 } from "@/services/userServices";
 import { Bookings, BookingWithService } from "@/types/bookingsType";
 import { Services } from "@/types/serviceType";
@@ -11,12 +12,14 @@ import { nanoid } from "nanoid";
 import emailjs from "@emailjs/browser";
 import { BookingFormType } from "@/types/bookingFormType";
 import toast from "react-hot-toast";
+import { TimeSlot } from "@/types/timeType";
 
 export function useBooking() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [services, setServices] = useState<Services[]>([]);
   const [bookings, setBookings] = useState<Bookings[]>([]);
+  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [success, setSuccess] = useState(false);
 
   async function orderConfirmation(orderData: BookingWithService) {
@@ -120,12 +123,14 @@ export function useBooking() {
     async function fetchData() {
       setLoading(true);
       try {
-        const [bookingRes, serviceRes] = await Promise.all([
+        const [bookingRes, serviceRes, timeRes] = await Promise.all([
           getDataBookings(),
           getDataServices(),
+          getDataTimeSlot()
         ]);
         setBookings(bookingRes);
         setServices(serviceRes);
+        setTimeSlots(timeRes)
       } catch (err: any) {
         setError(err.message || "Failed fetch data");
       } finally {
@@ -138,6 +143,7 @@ export function useBooking() {
   return {
     orderConfirmation,
     submitBooking,
+    timeSlots,
     bookings,
     services,
     loading,
