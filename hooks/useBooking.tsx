@@ -67,8 +67,6 @@ export function useBooking() {
     const bookingId = `BK-${nanoid(7)}`;
     const secretToken = `ST-${nanoid(15)}`;
 
-    console.log("DEBUG TIME:", formData.time);
-
     const result = await createBooking({
       booking_id: bookingId,
       service_id: formData.service_id,

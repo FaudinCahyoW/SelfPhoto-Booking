@@ -6,6 +6,9 @@
    DESIGN SYSTEM
 ========================= */
 
+@source "../app/adminPage/**/*.{js,ts,jsx,tsx,mdx}";
+
+@source "../.flowbite-react/class-list.json";
 :root {
   --background: #fefefe;
   --secondary: #fefefe;

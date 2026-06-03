@@ -1,4 +1,4 @@
-import { getSupabase, supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import type { Bookings, BookingWithService } from "../types/bookingsType";
 import { bookingSchema } from "@/schemas/bookingSchema";
 
@@ -26,7 +26,7 @@ export async function createBooking(
     // unique constraint error
     if (error.message.includes("unique_booking_slot")) {
       throw new Error(
-        "Jam sudah dibooking orang lain, silahkan pilih waktu lain",
+        "Time Scheduled already booked, please choose another schedule",
       );
     }
     throw new Error(`Create booking failed: ${error.message}`);
