@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function AppHeader() {
   const pathname = usePathname();
@@ -8,9 +9,7 @@ export default function AppHeader() {
   if (pathname.startsWith("/adminPage/")) {
     return (
       <>
-        <header className="border-b bg-white">
-
-        </header>
+        <header className="border-b bg-white"></header>
       </>
     );
   }
@@ -37,6 +36,17 @@ export default function AppHeader() {
 
           <div className="bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm">
             💳 Pay on Site
+          </div>
+          <div className="ms-auto">
+            <Link href="/adminPage/login">
+              {" "}
+              <button
+                type="button"
+                className="border p-1.5 rounded-xl bg-green-500 hover:bg-green-700 hover:border-green-700 font-semibold cursor-pointer"
+              >
+                Login to admin panel
+              </button>
+            </Link>
           </div>
         </div>
       </div>
