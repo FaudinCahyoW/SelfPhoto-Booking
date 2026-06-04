@@ -5,7 +5,7 @@ interface CardFormCompProps {
 
 export function CardFormComp({ inputs, onSubmit }: CardFormCompProps) {
   return (
-    <div className="w-full max-w-3xl rounded-3xl border border-gray-800 bg-neutral-950/80 backdrop-blur-md shadow-2xl sm:p-5 transition-all duration-300">
+    <div className="w-full max-w-3xl rounded-3xl border h-full border-gray-800 bg-neutral-950/80 backdrop-blur-md shadow-2xl sm:p-5 transition-all duration-300">
       <form onSubmit={onSubmit}>
         <div className="text-gray-200">
           {inputs}

@@ -24,7 +24,7 @@ export default function LoginAdmin() {
       return;
     }
 
-    toast.success("Login berhasil");
+    toast.success("Login Success");
 
     router.push("/adminPage/dashboard");
   };

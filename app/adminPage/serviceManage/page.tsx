@@ -80,7 +80,7 @@ export default function ServicePage() {
                 {...register("service_desc", {
                   required: true,
                 })}
-                className="w-full px-3 py-2 h-44 bg-neutral-900 text-gray-200 border border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 placeholder:text-gray-600 resize-y transition-all text-sm"
+                className="w-full px-3 py-2 h-30 bg-neutral-900 text-gray-200 border border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 placeholder:text-gray-600 resize-y transition-all text-sm"
               />
             </div>
 
