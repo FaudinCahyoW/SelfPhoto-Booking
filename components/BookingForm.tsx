@@ -31,7 +31,7 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
     setValue,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<BookingFormType>({
     resolver: zodResolver(bookingSchema),
 
@@ -173,8 +173,9 @@ export function BookingForm({ selectedService }: PropsSelectedService) {
               duration-300
               hover:scale-105
             "
+            disabled={isSubmitting}
           >
-            Make Order
+            {isSubmitting ? "Processing..." : "Make Order"}
           </button>
         </form>
       </section>
