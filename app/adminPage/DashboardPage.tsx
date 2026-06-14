@@ -1,23 +1,81 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useAdmin } from "@/hooks/useAdmin";
+import { SearchComponent } from "@/components/SearchComponent";
+
+type SortKey = "booking_id" | "name" | "service_type" | "date" | "time"
+type SortDirection = "asc" | "desc"
 
 export default function DashboardPage() {
   const { orders, services } = useAdmin();
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
+  const [sortKey, setSortKey] = useState<SortKey>("booking_id")
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
+  const baseOrders = useMemo(() => {
+    return filteredOrders.length > 0 || orders.length === 0 ? filteredOrders : orders;
+
+  }, [filteredOrders, orders])
+
+  const sortedOrders = useMemo(() => {
+    const copyData = [...baseOrders]
+    return copyData.sort((a,b) => {
+      let valueA = ""
+      let valueB = ""
+
+      if(sortKey === "service_type"){
+        valueA = a.service_tb?.service_type || ""
+        valueB = b.service_tb?.service_type || ""
+      }else{
+        valueA = a[sortKey] || ""
+        valueB = b[sortKey] || ""
+      }
+
+      if (sortDirection === "asc"){
+        return String(valueA).localeCompare(String(valueB), undefined, {numeric: true})
+      }else{
+        return String(valueB).localeCompare(String(valueA), undefined, {numeric: true})
+
+      }
+    })
+  }, [baseOrders, sortKey, sortDirection])
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentOrders = sortedOrders.slice(indexOfFirstItem, indexOfLastItem)
+  
 
-  const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(orders.length / itemsPerPage);
+  const targetOrdersLength =
+    filteredOrders.length > 0 || orders.length === 0
+      ? filteredOrders.length
+      : orders.length;
+  const totalPages = Math.ceil(targetOrdersLength / itemsPerPage);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const todayStr = new Date().toLocaleDateString("en-CA");
   const todayOrdersCount = orders.filter((o) => o.date === todayStr).length;
+
+  const handleSort = (key: SortKey) => {
+    let direction: SortDirection = "asc"
+    if (sortKey === key && sortDirection === "asc"){
+      direction = "desc"
+    }
+    setSortDirection(direction)
+    setSortKey(key)
+  }
+
+  const handleSearchChange = (newData: any[]) => {
+    setFilteredOrders(newData);
+  };
+
+  const RenderSortIcon = ({columN}: {columN: SortKey}) => {
+    if (sortKey !== columN) return <span className="text-slate-300 ml-1 text-xs cursor-pointer">⇅ sort</span>
+    return sortDirection === "asc" ? <span className="text-slate-800 ml-1 text-xs cursor-pointer">▲ asc</span>: <span className="text-slate-800 ml-1 text-xs cursor-pointer">▼ desc</span>
+  }
 
   return (
     <div className="flex min-h-screen font-sans p-4">
@@ -55,33 +113,36 @@ export default function DashboardPage() {
               {todayOrdersCount} Session
             </span>
             <span className="text-[10px] text-slate-500 block mt-1">
-              Registered visit today{" "}
+              Registered visit today
             </span>
           </div>
         </div>
 
+        {/* Tabel Data */}
         <div className="p-4 bg-white rounded-lg border border-slate-200">
-          <h2 className="text-sm font-bold text-slate-800 mb-1.5">
-            New Orders
-          </h2>
+          <section className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-bold text-slate-800">New Orders</h2>
+            <SearchComponent onSearchChange={handleSearchChange} />
+          </section>
+
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-200">
-                  <th className="py-4 text-left font-semibold text-slate-500">
-                    Booking ID
+                  <th onClick={() => handleSort("booking_id")} className="py-4 text-left font-semibold text-slate-500">
+                    Booking ID <RenderSortIcon columN="booking_id"/>
                   </th>
-                  <th className="py-4 text-left font-semibold text-slate-500">
-                    Customer
+                  <th onClick={() => handleSort("name")} className="py-4 text-left font-semibold text-slate-500">
+                    Customer <RenderSortIcon columN="name"/>
                   </th>
-                  <th className="py-4 text-left font-semibold text-slate-500">
-                    Order Service
+                  <th onClick={() => handleSort("service_type")} className="py-4 text-left font-semibold text-slate-500">
+                    Order Service <RenderSortIcon columN="service_type"/>
                   </th>
-                  <th className="py-4 text-right font-semibold text-slate-500">
-                    Order Date
+                  <th onClick={() => handleSort("date")} className="py-4 text-right font-semibold text-slate-500">
+                    Order Date <RenderSortIcon columN="date"/>
                   </th>
-                  <th className="py-4 text-right font-semibold text-slate-500">
-                    Order Time Schedule
+                  <th onClick={() => handleSort("time")} className="py-4 text-right font-semibold text-slate-500">
+                    Order Time Schedule <RenderSortIcon columN="time"/>
                   </th>
                   <th className="py-4 text-right font-semibold text-slate-500">
                     Customer Phone Number
@@ -130,7 +191,7 @@ export default function DashboardPage() {
                 ) : (
                   <tr>
                     <td colSpan={6} className="py-8 text-center text-slate-400">
-                      Tidak ada data pesanan.
+                      Data not found.
                     </td>
                   </tr>
                 )}
@@ -138,8 +199,10 @@ export default function DashboardPage() {
             </table>
           </div>
 
+          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between border-t border-slate-200 px-4 py-3 sm:px-6 mt-4">
+              {/* Mobile Pagination */}
               <div className="flex flex-1 justify-between sm:hidden">
                 <button
                   onClick={() => paginate(Math.max(currentPage - 1, 1))}
@@ -158,6 +221,8 @@ export default function DashboardPage() {
                   Next
                 </button>
               </div>
+
+              {/* Desktop Pagination */}
               <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs text-slate-500">
@@ -165,9 +230,9 @@ export default function DashboardPage() {
                     <span className="font-medium">{indexOfFirstItem + 1}</span>{" "}
                     to{" "}
                     <span className="font-medium">
-                      {Math.min(indexOfLastItem, orders.length)}
+                      {Math.min(indexOfLastItem, targetOrdersLength)}
                     </span>{" "}
-                    of <span className="font-medium">{orders.length}</span>{" "}
+                    of <span className="font-medium">{targetOrdersLength}</span>{" "}
                     results
                   </p>
                 </div>
@@ -179,9 +244,8 @@ export default function DashboardPage() {
                     <button
                       onClick={() => paginate(Math.max(currentPage - 1, 1))}
                       disabled={currentPage === 1}
-                      className="relative inline-flex items-center rounded-l-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 disabled:opacity-50"
+                      className="relative inline-flex items-center rounded-l-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 disabled:opacity-50"
                     >
-                      <span className="sr-only">Previous</span>
                       &laquo;
                     </button>
 
@@ -190,9 +254,9 @@ export default function DashboardPage() {
                         <button
                           key={page}
                           onClick={() => paginate(page)}
-                          className={`relative inline-flex items-center px-4 py-2 text-xs font-semibold ring-1 ring-inset ring-slate-300 focus:z-20 ${
+                          className={`relative inline-flex items-center px-4 py-2 text-xs font-semibold ring-1 ring-inset ring-slate-300 ${
                             currentPage === page
-                              ? "z-10 bg-blue-600 text-white focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                              ? "z-10 bg-blue-600 text-white"
                               : "text-slate-900 hover:bg-slate-50"
                           }`}
                         >
@@ -206,9 +270,8 @@ export default function DashboardPage() {
                         paginate(Math.min(currentPage + 1, totalPages))
                       }
                       disabled={currentPage === totalPages}
-                      className="relative inline-flex items-center rounded-r-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 disabled:opacity-50"
+                      className="relative inline-flex items-center rounded-r-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 disabled:opacity-50"
                     >
-                      <span className="sr-only">Next</span>
                       &raquo;
                     </button>
                   </nav>
